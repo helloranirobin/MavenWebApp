@@ -13,10 +13,12 @@ spec:
         app: mavenwebapp
     spec:
       containers:
-      - image: rani12345/maven-web-app
+      - image: rani12345/maven-web-app:16
         name: mavenwebapp
         ports:
         - containerPort: 8080
+      imagePullSecrets:
+      - name: secretkey  
 ---
 #Service
 apiVersion: v1
@@ -25,7 +27,7 @@ metadata:
   name: mavenwebapp
 spec:
   type: LoadBalancer
-  ports:
+  ports: 
     - port: 80
       targetPort: 8080
   selector:

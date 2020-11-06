@@ -21,10 +21,9 @@ node{
         sh "docker push rani12345/maven-web-app:${buildNumber}"
     }
     
-    stage("Deploy to Kubernetes Cluster"){
-        sshagent(['Docker_Swarm_Manager_Dev']) {
-            sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.47.232 docker service rm javawebapp || true'
-            sh "ssh ubuntu@172.31.47.232 docker service create --name javawebapp -p 8080:8080 --replicas 2 dockerhandson/java-web-app:${buildNumber}"
-        }
+    stage("Deploy To Kubernetes Cluster"){
+       withKubeConfig(credentialsId: 'KUBECONFIG') {
+        sh 'kubectl apply -f mavenweb.yml'
+      } 
     }
 }
